@@ -31,10 +31,10 @@ router.post("/offer/publish", isAuthenticated, fileUpload(), async (req, res) =>
             product_description: description,
             product_price: price,
             product_details: [
-                {MARQUE: brand},
-                {TAILLE: size},
-                {ETAT: condition},
-                {COULEUR: color},
+                { MARQUE: brand },
+                { TAILLE: size },
+                { ETAT: condition },
+                { COULEUR: color },
                 { EMPLACEMENT: city }
             ],
             product_image: cloudinaryResponse,
@@ -51,6 +51,7 @@ router.post("/offer/publish", isAuthenticated, fileUpload(), async (req, res) =>
         await newOffer.save()
 
         res.status(201).json(newOffer)
+        
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -77,6 +78,7 @@ router.put("/offer/update/:id", isAuthenticated, async (req, res) => {
 
         await offer.save();
         res.json(offer);
+
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -94,6 +96,7 @@ router.delete("/offer/delete/:id", isAuthenticated, async (req, res) => {
 
         await offer.deleteOne();
         res.json({ message: "Offer deleted" });
+
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -148,6 +151,7 @@ router.get("/offers/:id", async (req, res) => {
         }
 
         res.json(offer)
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
