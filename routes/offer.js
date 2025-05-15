@@ -6,9 +6,10 @@ const Offer = require("../models/Offer");
 
 const convertToBase64 = require("../utils/convertToBase64");
 const isAuthenticated = require("../middleware/isAuthenticated");
+const fileUpload = require("express-fileupload");
 
-
-router.post("/offer/publish", isAuthenticated, async (req, res) => {
+// publier une offre =========
+router.post("/offer/publish", isAuthenticated, fileUpload(), async (req, res) => {
     try {
         const { title, description, price, condition, city, brand, size, color } = req.body;
 
@@ -96,9 +97,63 @@ router.delete("/offer/delete/:id", isAuthenticated, async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
-})
+});
+
+// filtrer offres =========
+router.get("/offers", async (req, res) => {
+    try {
+        const { title, priceMin, priceMax, sort, page = 1 } = req.query
+
+        const filters = {};
+
+        if (title) {
+            filters.product_name = new RegExp(title, "i"); // ne pas oublier `i` = insensible à la casse
+        }
+
+        if (priceMin || priceMax) {
+            filters.product_price = {};
+            if (priceMin) filters.product_price.$gte = Number(priceMin);
+            if (priceMax) filters.product_price.$lte = Number(priceMax);
+        }
+
+        const sortOptions = {}; 
+        if (sort === "price-desc")sortOptions.product_price = 1;
+        if (sort === "price-asc")sortOptions.product_price = -1;
+
+        const limit = 5;  // gère le nombre d'offre /page 
+        const skip = (page -1) * limit;
+
+        const offers = await Offer.find(filters)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limit)
+        .populate("owner", "account")
+
+        const count = await Offer.countDocuments(filters)
+
+        res.json({ count, offers });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+});
+
+// récuperer les détails d'une annonce
+router.get("/offers/:id", async (req, res) => {
+    try {
+        const offer = await Offer.findById(req.params.id).populate("owner", "account");
+
+        if (!offer) {
+            return res.status(404).json({ message: "Offer not found" });
+        }
+
+        res.json(offer)
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 
 module.exports = router;
 
-
+  
