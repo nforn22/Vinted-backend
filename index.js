@@ -5,15 +5,8 @@ const fileUpload = require("express-fileupload");
 
 const app = express();
 
-// app.use(fileUpload());
+// app.use(fileUpload()); Middleware global désactivé, on vient le mettre directement dans les routes concernées
 app.use(express.json());
-
-// config cloudinary
-cloudinary.config({
-  cloud_name: "dg2uamnxa", 
-  api_key: "792612549899165",
-  api_secret: "DvENEaVtjEf4bfMe4gPzNNluHxk",
-});
 
 mongoose.connect("mongodb://localhost:27017/auth-vinted");
 
