@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require("../config/cloudinary");
+
 
 const Offer = require("../models/Offer");
 
@@ -51,7 +52,7 @@ router.post("/offer/publish", isAuthenticated, fileUpload(), async (req, res) =>
         await newOffer.save()
 
         res.status(201).json(newOffer)
-        
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

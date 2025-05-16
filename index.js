@@ -8,7 +8,7 @@ const app = express();
 // app.use(fileUpload()); Middleware global désactivé, on vient le mettre directement dans les routes concernées
 app.use(express.json());
 
-mongoose.connect("mongodb://localhost:27017/auth-vinted");
+mongoose.connect(process.env.MONGODB_URI);
 
 const userRoutes = require("./routes/user");
 const offerRoutes = require("./routes/offer")
@@ -25,6 +25,8 @@ app.all(/.*/, (req, res) => {
   return res.status(404).json("All routes")
 })
 
-app.listen(3000, () => {
-  console.log("Server started 🚀");
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log("Server started 👕👖 on port " + port);
 });
