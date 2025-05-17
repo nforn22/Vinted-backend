@@ -9,20 +9,24 @@
 
 ## Installation
 
-- Cloner le dépôt
+- Cloner le dépôt: 
+
 $ git clone https://github.com/<votre-utilisateur>/Vinted.git
 
-$ cd Vinted
+- Installer les dépendances:
 
-- Installer les dépendances
-  $ npm install
+$ npm install
 
 ## Configuration
 
 - Créer un fichier .env à la racine avec les variables suivantes :
-MONGODB_URI=mongodb://localhost:27017/auth-vinted
+
+MONGODB_URI=mongodb://
+
 CLOUDINARY_CLOUD_NAME=your_cloud_name
+
 CLOUDINARY_API_KEY=your_api_key
+
 CLOUDINARY_API_SECRET=your_api_secret
 
 ## Démarrage
