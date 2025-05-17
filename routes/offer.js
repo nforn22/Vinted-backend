@@ -45,7 +45,7 @@ router.post("/offer/publish", isAuthenticated, fileUpload(), async (req, res) =>
 
         await newOffer.save();
 
-        const mainImgMoved = await cloudinary.uploader.upload(convertedPicture, {
+        const mainImgMoved = await cloudinary.uploader.upload(convertToBase64(req.files.picture), {
             folder: `vinted/offers/${newOffer._id}`,
         });
 
