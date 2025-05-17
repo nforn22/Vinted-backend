@@ -22,9 +22,9 @@ router.post("/offer/publish", isAuthenticated, fileUpload(), async (req, res) =>
             return res.status(400).json({ message: "Title/description/price exceeds allowed limits" })
         }
 
-        const convertedPicture = convertToBase64(req.files.picture);
-        const cloudinaryResponse = await cloudinary.uploader.upload(convertedPicture, {
-            folder: `vinted/offers`
+        const convertedMainImg = convertToBase64(req.files.picture);
+        const mainImgUpload = await cloudinary.uploader.upload(convertedMainImg, {
+            folder: `vinted/offers/temp`
         });
 
         const newOffer = new Offer({
@@ -38,21 +38,35 @@ router.post("/offer/publish", isAuthenticated, fileUpload(), async (req, res) =>
                 { COULEUR: color },
                 { EMPLACEMENT: city }
             ],
-            product_image: cloudinaryResponse,
+            product_image: mainImgUpload,
+            product_pictures: [],
             owner: req.user
         })
 
         await newOffer.save();
 
-        const movedImage = await cloudinary.uploader.upload(convertedPicture, {
+        const mainImgMoved = await cloudinary.uploader.upload(convertedPicture, {
             folder: `vinted/offers/${newOffer._id}`,
-          });
+        });
 
-        newOffer.product_image = movedImage; // met a jour l'img dans l'offre
+        newOffer.product_image = mainImgMoved; // met a jour l'img dans l'offre
+
+        if (req.files.pictures) {
+          const pictures = Array.isArray(req.files.pictures)
+          ? req.files.pictures 
+          : [req.files.pictures];
+
+          for (picture of pictures) {
+            const converted = convertToBase64(picture)
+            const upload = await cloudinary.uploader.upload(converted, {
+                folder: `vinted/offers/${newOffer._id}/extra`,
+            });
+            newOffer.product_pictures.push(upload)
+          }
+        }
         await newOffer.save()
 
         res.status(201).json(newOffer)
-
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -150,9 +164,7 @@ router.get("/offers/:id", async (req, res) => {
         if (!offer) {
             return res.status(404).json({ message: "Offer not found" });
         }
-
         res.json(offer)
-
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

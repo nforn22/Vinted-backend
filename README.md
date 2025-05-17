@@ -11,6 +11,7 @@
 
 - Cloner le dépôt
 $ git clone https://github.com/<votre-utilisateur>/Vinted.git
+
 $ cd Vinted
 
 - Installer les dépendances
@@ -26,7 +27,7 @@ CLOUDINARY_API_SECRET=your_api_secret
 
 ## Démarrage
 
-$ npm start
+$ npm run start
 
 ## Structure
 

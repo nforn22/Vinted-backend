@@ -1,13 +1,16 @@
-require("dotenv").config();  // charge .env en local, sans effet sur Northflank
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
-const fileUpload = require("express-fileupload");
+// const fileUpload = require("express-fileupload");
 
 const app = express();
 
 // app.use(fileUpload()); Middleware global désactivé, on vient le mettre directement dans les routes concernées
 app.use(express.json());
+
+const cors = require("cors");
+app.use(cors());
 
 mongoose.connect(process.env.MONGODB_URI);
 
