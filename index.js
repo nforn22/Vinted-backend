@@ -1,3 +1,4 @@
+require("dotenv").config();  // charge .env en local, sans effet sur Northflank
 const express = require("express");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
