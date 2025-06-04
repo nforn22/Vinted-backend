@@ -22,10 +22,10 @@ router.post("/offer/publish", isAuthenticated, fileUpload(), async (req, res) =>
             return res.status(400).json({ message: "Title/description/price exceeds allowed limits" })
         }
 
-        const convertedMainImg = convertToBase64(req.files.picture);
-        const mainImgUpload = await cloudinary.uploader.upload(convertedMainImg, {
-            folder: `vinted/offers/temp`
-        });
+        // const convertedMainImg = convertToBase64(req.files.picture);
+        // const mainImgUpload = await cloudinary.uploader.upload(convertedMainImg, {
+        //     folder: `vinted/offers/temp`
+        // });
 
         const newOffer = new Offer({
             product_name: title,
@@ -38,12 +38,10 @@ router.post("/offer/publish", isAuthenticated, fileUpload(), async (req, res) =>
                 { COULEUR: color },
                 { EMPLACEMENT: city }
             ],
-            product_image: mainImgUpload,
+            // product_image: mainImgUpload,
             product_pictures: [],
             owner: req.user
         })
-
-        await newOffer.save();
 
         const mainImgMoved = await cloudinary.uploader.upload(convertToBase64(req.files.picture), {
             folder: `vinted/offers/${newOffer._id}`,

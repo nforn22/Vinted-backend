@@ -6,7 +6,7 @@ const cloudinary = require("cloudinary").v2;
 
 const app = express();
 
-// app.use(fileUpload()); Middleware global désactivé, on vient le mettre directement dans les routes concernées
+// app.use(fileUpload());
 app.use(express.json());
 
 const cors = require("cors");

@@ -1,3 +1,5 @@
+# Backend server
+
 ## Technologies
 
 - Node.js
@@ -10,7 +12,7 @@
 ## Installation
 
 - Cloner le dépôt
-$ git clone https://github.com/<votre-utilisateur>/Vinted.git
+$ git clone <https://github.com/votre-utilisateur/Vinted.git>
 
 $ cd Vinted
 
